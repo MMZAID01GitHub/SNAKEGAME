@@ -13,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class Game extends Application {
@@ -35,7 +36,8 @@ public class Game extends Application {
 	Random generator = new Random();
 	ArrayList<Piece> snake = new ArrayList<Piece>(); //THE PIECES OF THE SNAKE
 	Directions dir;
-	Text score = new Text(250,50,"Score: ");
+	Font font = new Font("Arial", 16);
+	Text score = new Text(250,50,"Score: 000");
 	Group root = new Group();
 
 	public static void main(String[] args) {
@@ -52,6 +54,7 @@ public class Game extends Application {
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
 		scene.setFill(Color.DODGERBLUE);
 		scene.setOnKeyPressed(this::movement);//ARROWKEY MOVEMENT HANDLER
+		score.setFont(font);
 		root.getChildren().add(score);
 		dir = Directions.DOWN;
 
@@ -98,6 +101,7 @@ public class Game extends Application {
 						System.out.println("COLLISION");
 						moveFood();
 						lengthen();
+						addScore();
 					}
 					
 
@@ -183,6 +187,9 @@ public class Game extends Application {
 		snake.get(snake.size()-1).setFill(Color.GHOSTWHITE);
 		snake.get(snake.size()-1).setStroke(Color.SLATEGREY);
 		root.getChildren().add(snake.get(snake.size()-1));
+	}
+	public void addScore() {
+		score.setText("Score: " + (snake.size()-1)*100);
 	}
 	
 
