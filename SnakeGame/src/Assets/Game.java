@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
@@ -12,26 +13,30 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 public class Game extends Application {
 
 	final int WIDTH = 600;
-	final int HEIGHT = 400;
+	final int HEIGHT = 540;
 
 	double size = 30;
-	double rectX = 100;
-	double rectY = 200;  
+	double rectX = 0;
+	double rectY = 0;  
 	double previousX = 0;
 	double previousY = 0;
 	double previousPreviousX=0;
 	double previousPreviousY=0;
+	double randomX;
+	double randomY;
 	double xSpeed = size;
 	
-
+	Rectangle food = new Rectangle(size, size);
+	Random generator = new Random();
 	ArrayList<Piece> snake = new ArrayList<Piece>(); //THE PIECES OF THE SNAKE
-	
-
 	Directions dir;
+	Text score = new Text(250,50,"Score: ");
+	Group root = new Group();
 
 	public static void main(String[] args) {
 
@@ -42,38 +47,34 @@ public class Game extends Application {
 	public void start(Stage stage) throws Exception {
 
 
-
+//Set up
 		stage.setTitle("Snake");
-
-		Group root = new Group();
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
-		scene.setFill(Color.BLACK);
+		scene.setFill(Color.DODGERBLUE);
 		scene.setOnKeyPressed(this::movement);//ARROWKEY MOVEMENT HANDLER
-
+		root.getChildren().add(score);
 		dir = Directions.DOWN;
-//		Piece rect = new Piece();
-//		rect.setLayoutX(rectX);
-//		rect.setLayoutY(rectY);
-//		rect.setWidth(size);
-//		rect.setHeight(size);
-//		rect.setFill(Color.AZURE);
-//		rect.setStroke(Color.ORANGE);
-//		root.getChildren().add(rect);
-		for(int i = 0; i < 10; i ++) {//INSTANTIATING SOME PIECES
-			snake.add(new Piece());
-		}
+
+		snake.add(new Piece());
 		for(Piece piece : snake) {
 			piece.setLayoutX(rectX);
 			piece.setLayoutY(rectY);
 			piece.setWidth(size);
 			piece.setHeight(size);
-			piece.setFill(Color.AQUAMARINE);
-			piece.setStroke(Color.ORANGE);
+			piece.setFill(Color.GHOSTWHITE);
+			piece.setStroke(Color.SLATEGREY);
 			root.getChildren().add(piece);
 		}
 		
-		snake.get(0).setFill(Color.CORAL);//MAKING THE HEAD COLOR UNIQUE
-
+		snake.get(0).setFill(Color.YELLOW);//MAKING THE HEAD COLOR UNIQUE
+		
+		
+		randomX = generator.nextInt(WIDTH/30)*30;
+		randomY = generator.nextInt(HEIGHT/30)*30;
+		food.setLayoutX(randomX);
+		food.setLayoutY(randomY);
+		food.setFill(Color.RED);
+		root.getChildren().add(food);
 		
 
 		stage.setScene(scene);
@@ -86,8 +87,19 @@ public class Game extends Application {
 			@Override
 			public void handle(long currentTime) {
 				
-				if(currentTime-lastUpdate >= 250000000) {
+				
+				if(currentTime-lastUpdate >= 100000000) {
 					// UPDATE
+					
+//					System.out.println("SNAKE: (" + snake.get(0).getLayoutX() + "," + snake.get(0).getLayoutY() + ")");
+//					System.out.println("FOOD: (" + food.getLayoutX() + "," + food.getLayoutY() + ")");
+
+					if(snake.get(0).getLayoutX() == food.getLayoutX() && snake.get(0).getLayoutY() == food.getLayoutY()) {
+						System.out.println("COLLISION");
+						moveFood();
+						lengthen();
+					}
+					
 
 					//RECORDING COORDINATES BEFORE REPLACEMENT
 					for(Piece p : snake) {
@@ -156,4 +168,22 @@ public class Game extends Application {
 			dir = Directions.UP;
 		}
 	}
+	public void moveFood() {//GETS NEW COORDINATES FOR THE FOOD
+		randomX = generator.nextInt(WIDTH/30)*30;
+		randomY = generator.nextInt(HEIGHT/30)*30;
+		food.setLayoutX(randomX);
+		food.setLayoutY(randomY);
+	}
+	public void lengthen() {
+		snake.add(new Piece());
+		snake.get(snake.size()-1).setLayoutX(rectX);
+		snake.get(snake.size()-1).setLayoutY(rectY);
+		snake.get(snake.size()-1).setWidth(size);
+		snake.get(snake.size()-1).setHeight(size);
+		snake.get(snake.size()-1).setFill(Color.GHOSTWHITE);
+		snake.get(snake.size()-1).setStroke(Color.SLATEGREY);
+		root.getChildren().add(snake.get(snake.size()-1));
+	}
+	
+
 }
