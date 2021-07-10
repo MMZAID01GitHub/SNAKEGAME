@@ -1,0 +1,25 @@
+you have a square
+on arrowpress 
+	while (another key isn't pressed)
+		translate in direction arrowpress
+
+food x,y random location
+if (square x,y == food x,y)
+	add new square following current square
+	food x,y, new random location
+	
+	
+	
+How id design the squares for the snake:
+	maybe like an arraylist of squares
+	when food is eaten another square object is added to the list and 
+	while(lastKey = left)
+		square's x = previous square x + 1
+	while(lastKey = right)
+		square's x = previous square x - 1
+	while(lastKey = up)
+		square's y = previous square y -1
+	while(lastKey = down)
+		square's y = previous square y + 1
+		
+Squares would be Rectangle objects 
