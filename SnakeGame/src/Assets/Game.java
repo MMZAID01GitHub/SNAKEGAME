@@ -175,6 +175,13 @@ public class Game extends Application {
 	public void moveFood() {//GETS NEW COORDINATES FOR THE FOOD
 		randomX = generator.nextInt(WIDTH/30)*30;
 		randomY = generator.nextInt(HEIGHT/30)*30;
+		
+		for(Piece p : snake) {
+			if(p.getLayoutX() == randomX && p.getLayoutY() == randomY) {
+				moveFood();
+			}
+		}
+		
 		food.setLayoutX(randomX);
 		food.setLayoutY(randomY);
 	}
