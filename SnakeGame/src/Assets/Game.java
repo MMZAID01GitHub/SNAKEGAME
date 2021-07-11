@@ -32,7 +32,7 @@ public class Game extends Application {
 	double randomY;
 	double xSpeed = size;
 
-	
+
 	//Creating assets (food, border, score, gameover)
 	Rectangle food = new Rectangle(size, size);
 	Rectangle border = new Rectangle(0, 0, WIDTH, HEIGHT);
@@ -159,7 +159,8 @@ public class Game extends Application {
 		};
 
 		animator.start();     
-		
+
+
 	}
 
 	public enum Directions{
@@ -210,8 +211,8 @@ public class Game extends Application {
 		score.setText("Score: " + (snake.size()-1)*100);
 	}
 	public int checkLoss() {
-		
-		if(snake.get(0).getLayoutX() < 0 || snake.get(0).getLayoutX() > WIDTH || snake.get(0).getLayoutY() < 0 || snake.get(0).getLayoutY() > HEIGHT) {
+
+		if(snake.get(0).getLayoutX() < 0 || snake.get(0).getLayoutX() >= WIDTH || snake.get(0).getLayoutY() < 0 || snake.get(0).getLayoutY() >= HEIGHT) {
 			System.out.println("OUTOFBOUNDS");
 			gameover.setFill(Color.RED);
 			root.getChildren().add(gameover);
@@ -222,9 +223,11 @@ public class Game extends Application {
 				System.out.println("GAME OVER");
 				gameover.setFill(Color.RED);
 				root.getChildren().add(gameover);
+				root.getChildren().remove(score);
+				root.getChildren().add(score);
 				return -1;
 			}
-			
+
 		}
 		return(0);
 	}
